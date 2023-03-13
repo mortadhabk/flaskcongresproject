@@ -1,0 +1,31 @@
+<html>
+<head>
+<title>
+</title>
+</head>
+<body>
+   
+
+   
+<table>
+  <tr>
+    <th>film</th>
+    <th>prenom</th>
+    <th>nom</th>
+  </tr>
+
+  {% for k,v in dict.items() %}
+  <tr>
+    <td>{{ k }}</td>
+    <td>{{dict[k][0]}}</td>
+    <td>{{dict[k][1]}}</td>
+  </tr>
+  {% endfor %}
+
+
+  
+</table>
+
+
+</body>
+</html>

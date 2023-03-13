@@ -1,0 +1,32 @@
+{% extends "layout.html" %}
+{% block title %}Index{% endblock %}
+{% block head %}
+ {{ super() }}
+ <style type="text/css">
+ .important { color: #336699; }
+ </style>
+{% endblock %}
+{% block content %}
+
+
+ {% if success %}
+    <h4 style="color:green"> {{success}}</h4> 
+{% endif %}
+{% if error %}
+<h3 style="color:red"> {{error}}</h3>
+{% endif %}
+
+ <h5>Fonctionnalités</h5>
+ <ul class="list-group">
+    <li class="list-group-item"><a class="link-secondary" href="/listcongres">Liste des congrès</a></li>
+    <li class="list-group-item"><a class="link-secondary" href="/listparticipants">Liste de particiants</a></li>
+    <li class="list-group-item"><a class="link-secondary" href="/formulaire">créer un compte participant</a></li>
+    <li class="list-group-item"><a class="link-secondary" href="/saisieMail">Consuleter Les Inscriptons</a></li>
+    <li class="list-group-item"><a class="link-secondary" href="/creercongres">création d'un nouveau congrè</a></li>
+    <li class="list-group-item"><a class="link-secondary" href="/inscrire">s'inscrire à un congrès</a></li>
+    <li class="list-group-item"><a class="link-secondary" href="/choixactivite">choisir une thematique ou une activité</a></li>
+
+ </ul>
+
+ </p>
+{% endblock %}

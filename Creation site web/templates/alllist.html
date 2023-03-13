@@ -1,0 +1,30 @@
+{% extends "layout.html" %}
+{% block title %}Index{% endblock %}
+{% block head %}
+{{ super() }}
+<style type="text/css">
+    .important {
+        color: #336699;
+    }
+</style>
+{% endblock %}
+{% block content %}
+<ul>
+    <a href="/">return vers la liste</a>
+</ul>
+<h1>listactivite</h1>
+{%for item in data['activites'] %}
+<ul>
+    <li>{{item[1]}}</li>
+</ul>
+
+{%endfor%}
+<h1>listthematique</h1>
+
+<ul>
+    {%for item in data['thematiques'] %}
+    <li>{{item[0]}}</li>
+    {%endfor%}
+</ul>
+
+{% endblock %}

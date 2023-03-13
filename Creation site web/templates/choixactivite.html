@@ -1,0 +1,36 @@
+{% extends "layout.html" %}
+{% block title %}Index{% endblock %}
+{% block head %}
+ {{ super() }}
+ <style type="text/css">
+ .important { color: #336699; }
+ </style>
+{% endblock %}
+{% block content %}
+{% if success %}
+<h4 style="color:green"> {{success}}</h4> 
+{% endif %}
+{% if error %}
+<h3 style="color:red"> {{error}}</h3>
+{% endif %}
+<form action="/choixactivite" method="post">
+
+<h5>listactivite</h5>    
+{%for item in list['listactivite'] %}
+<ul class="list-group">
+
+    <li class="list-group-item"><input type="checkbox" name="activites" id="" value="{{item}}"> {{item[1]}}</li>
+</ul>
+
+{%endfor%}
+<h5>listthematique</h5>    
+{%for item in list['listthematique'] %}
+<ul class="list-group">
+    <li class="list-group-item"><input type="checkbox" name="thematiques" id="" value="{{item}}"> {{item[1]}}</li>
+</ul>
+
+{%endfor%}
+<input type="submit"> valider
+</form>
+
+{% endblock %}

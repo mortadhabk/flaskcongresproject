@@ -1,0 +1,38 @@
+
+{% extends "layout.html" %}
+{% block title %}Index{% endblock %}
+{% block head %}
+ {{ super() }}
+ <style type="text/css">
+ .important { color: #336699; }
+ </style>
+{% endblock %}
+{% block content %}
+<ul>
+    <li><a href="/" class="link-info">return vers la liste</a>
+    </li>
+  </ul>
+  <table  class="table table-striped">
+      <tr>
+        <th>TITRECONGRES</th>
+        <th>NUMEDITIONCONGRES</th>
+        <th>DTDEBUTCONGRES</th>
+        <th>DTFINCONGRES</th>
+        <th>URLSITEWEBCONGRES</th>
+        <th>codethematiques</th>
+        <th>codeactivites</th>
+      </tr>
+      <tr>
+        <td>{{item['TITRECONGRES']}}</td>
+        <td>{{item['NUMEDITIONCONGRES']}}</td>
+        <td>{{item['DTDEBUTCONGRES']}}</td>
+        <td>{{item['DTFINCONGRES']}}</td>
+        <td>{{item['URLSITEWEBCONGRES']}}</td>
+        <td>{{item['codethematiques']}}</td>
+        <td>{{item['codeactivites']}}</td>
+      </tr>
+  
+    </table>
+  
+    
+    {% endblock %}

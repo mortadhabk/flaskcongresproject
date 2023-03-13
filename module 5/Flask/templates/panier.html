@@ -1,0 +1,16 @@
+
+    {% if session['chocolatine'] %}
+  nb chocolatine : 
+{{session['chocolatine']}}
+{%endif%}
+{% if session['croissant'] %}
+  nb croissant : 
+{{session['croissant']}}
+
+{%endif%}
+
+{% if not session['croissant'] and not session['chocolatine'] %}
+
+Panier vide
+
+{%endif%}

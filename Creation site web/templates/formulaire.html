@@ -1,0 +1,96 @@
+{% extends "layout.html" %}
+{% block title %}Index{% endblock %}
+{% block head %}
+{{ super() }}
+<style type="text/css">
+    .important {
+        color: #336699;
+    }
+</style>
+{% endblock %}
+{% block content %}
+{% if error %}
+<h3 style="color:red"> {{error}}</h3>
+{% endif %}
+<ul>
+    <a href="/">return vers la liste</a>
+</ul>
+<div class="my-5 p-5 border border-dark rounded-3">
+    <form action="/enregistrer" method="post">
+
+        <div class="row">
+
+            <div class="col-md-6">
+                <label for="exampleInputEmail1" class="form-label">Email address</label>
+                <input type="email" class="form-control" name="EMAILPART">
+            </div>
+            <div class="col-md-6">
+                <label for="exampleInputEmail1" class="form-label">NOMPART</label>
+                <input type="text" class="form-control" name="NOMPART">
+            </div>
+            <div class="col-md-6">
+
+                <label for="exampleInputEmail1" class="form-label">PRENOMPART</label>
+                <input type="text" class="form-control" name="PRENOMPART">
+            </div>
+
+            <div class="col-md-6">
+                <label for="exampleInputEmail1" class="form-label">ORGANISMEPART</label>
+                <input type="text" class="form-control" name="ORGANISMEPART">
+            </div>
+            <div class="col-md-6">
+
+                <label for="exampleInputEmail1" class="form-label">CPPART</label>
+                <input type="text" class="form-control" name="CPPART">
+            </div>
+            <div class="col-md-6">
+
+                <label for="exampleInputEmail1" class="form-label">ADRPART</label>
+                <input type="text" class="form-control" name="ADRPART">
+            </div>
+            <div class="col-md-6">
+                <label for="exampleInputEmail1" class="form-label">VILLEPART</label>
+                <input type="text" class="form-control" name="VILLEPART">
+            </div>
+            <div class="col-md-6">
+                <label for="exampleInputEmail1" class="form-label">paysPart</label>
+                <input type="text" class="form-control" name="PAYSPART">
+            </div>
+            <div class="col-md-6">
+                <label for="exampleInputEmail1" class="form-label">DTINSCRIPTION</label>
+                <input type="date" class="form-control" name="DTINSCRIPTION">
+            </div>
+            <div class="form-check my-1 mt-3">
+                <input class="form-check-input" type="radio" name="CODESTATUT" value="1" id="flexRadioDefault1">
+                <label class="form-check-label" for="flexRadioDefault1">
+                    codeStatut 1
+                </label>
+            </div>
+            <div class="form-check my-1">
+                <input class="form-check-input" type="radio" name="CODESTATUT" value="2" id="flexRadioDefault2" checked>
+                <label class="form-check-label" for="flexRadioDefault2">
+                    codeStatut 2
+                </label>
+            </div>
+            <div class="form-check my-1 mb-3">
+                <input class="form-check-input" type="radio" name="CODESTATUT" value="3" id="flexRadioDefault2" checked>
+                <label class="form-check-label" for="flexRadioDefault2">
+                    codeStatut 3
+                </label>
+            </div>
+            <button type="submit" class="btn btn-primary">Submit</button>
+
+
+
+        </div>
+    </form>
+
+</div>
+
+
+
+
+
+
+
+{% endblock %}

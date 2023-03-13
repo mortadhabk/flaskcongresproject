@@ -1,0 +1,38 @@
+{% extends "layout.html" %}
+{% block title %}Index{% endblock %}
+{% block head %}
+ {{ super() }}
+ <style type="text/css">
+ .important { color: #336699; }
+ </style>
+{% endblock %}
+{% block content %}
+{% if error %}
+<h3 style="color:red"> {{error}}</h3> 
+{% endif %}
+<h6>Consulter la liste des inscriptions à des congres </h6>
+<div class="my-5 p-5 border border-dark rounded-3">
+    <div class="row">
+        <div class="col-md-6">
+            <form action="/search" method="get">
+                <div class="mb-3">
+                    <label for="exampleInputEmail1" class="form-label">Email address</label>
+                    <input type="email" class="form-control" name="EMAILPART" >
+                  </div>
+                  <button type="submit" class="btn btn-primary">Submit</button>
+            
+             </form>
+        </div>
+    </div>
+  
+</div>
+
+
+
+<hr>
+<a href="/">return vers la liste</a>
+</ul>
+
+
+
+{% endblock %}

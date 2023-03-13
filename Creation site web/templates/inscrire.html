@@ -1,0 +1,32 @@
+{% extends "layout.html" %}
+{% block title %}Index{% endblock %}
+{% block head %}
+ {{ super() }}
+ <style type="text/css">
+ .important { color: #336699; }
+ </style>
+{% endblock %}
+{% block content %}
+{% if success %}
+<h4 style="color:green"> {{success}}</h4>
+{% endif %}
+{% if error %}
+<h3 style="color:red"> {{error}}</h3>
+{% endif %}
+<form action="/inscrire" method="post">
+
+    {%for item in congres %}
+   
+    <div class="form-check">
+        <input class="form-check-input" type="checkbox" value="{{item[0]}}" name="congres">
+        <label class="form-check-label" for="flexCheckDefault">
+            {{item[1]}}
+        </label>
+    </div>
+    {%endfor%}
+    <div class="m-1">
+        <input type="submit" class="btn btn-primary"> valider
+
+    </div>
+</form>
+{% endblock %}

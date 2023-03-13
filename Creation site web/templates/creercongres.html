@@ -1,0 +1,87 @@
+{% extends "layout.html" %}
+{% block title %}Index{% endblock %}
+{% block head %}
+{{ super() }}
+<style type="text/css">
+    .important {
+        color: #336699;
+    }
+</style>
+{% endblock %}
+{% block content %}
+{% if error %}
+<h3 style="color:red"> {{error}}</h3>
+{% endif %}
+
+<ul>
+<a href="/">return vers la liste</a>
+</ul>
+<div class="my-5 p-5 border border-dark rounded-3">
+    <form action="/enregistrercongres" method="post">
+
+        <div class="row">
+
+            <div class="col-md-6">
+                <label for="exampleInputEmail1" class="form-label">TITRECONGRES</label>
+                <input type="text" class="form-control" name="TITRECONGRES">
+            </div>
+            <div class="col-md-6">
+                <label for="exampleInputEmail1" class="form-label">NUMEDITIONCONGRES</label>
+                <input type="number" class="form-control" name="NUMEDITIONCONGRES">
+            </div>
+            <div class="col-md-6">
+
+                <label for="exampleInputEmail1" class="form-label">DTDEBUTCONGRES</label>
+                <input type="date" class="form-control" name="DTDEBUTCONGRES">
+            </div>
+
+            <div class="col-md-6">
+                <label for="exampleInputEmail1" class="form-label">DTFINCONGRES</label>
+                <input type="date" class="form-control" name="DTFINCONGRES">
+            </div>
+            <div class="col-md-6">
+
+                <label for="exampleInputEmail1" class="form-label">URLSITEWEBCONGRES</label>
+                <input type="text" class="form-control" name="URLSITEWEBCONGRES">
+            </div>
+
+            <div class="m-5">
+                <h4>thematiques</h4>
+                {%for item in data['thematiques'] %}
+
+       
+                <div class="form-check">
+                    <input class="form-check-input" type="checkbox" value="{{item[0]}}" name="codethematiques">
+                    <label class="form-check-label" for="flexCheckDefault">
+                        {{item[1]}}
+
+                    </label>
+                </div>
+                {%endfor%}
+            </div>
+      <div class="m-5">
+        <h4>activites</h4>
+
+        {%for item in data['activites'] %}
+
+        <div class="form-check">
+            <input class="form-check-input" type="checkbox" value="{{item[0]}}" name="codeactivites">
+            <label class="form-check-label" for="flexCheckDefault">
+                {{item[1]}}
+            </label>
+        </div>
+        {%endfor%}
+      </div>
+          
+
+            <button type="submit" class="btn btn-primary">Submit</button>
+
+
+
+        </div>
+    </form>
+
+</div>
+
+
+{% endblock %}

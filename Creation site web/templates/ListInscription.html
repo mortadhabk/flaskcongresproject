@@ -1,0 +1,37 @@
+{% extends "layout.html" %}
+{% block title %}Index{% endblock %}
+{% block head %}
+ {{ super() }}
+ <style type="text/css">
+ .important { color: #336699; }
+ </style>
+{% endblock %}
+{% block content %}
+<ul>
+<a href="/">return vers la liste</a>
+</ul>
+<table class="table table-striped">
+    <tr>
+
+      <th>Congres</th>
+      <th>Thematiques</th>
+
+    </tr>
+    {%for item in participants %}
+    <tr>
+
+      <td>{{item[1]}}</td>
+      <td>{{item[2]}}</td>
+    </tr>
+    {%endfor%}
+
+  </table>
+
+  
+
+
+
+
+
+
+{% endblock %}

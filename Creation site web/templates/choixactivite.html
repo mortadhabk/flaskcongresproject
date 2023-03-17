@@ -11,7 +11,7 @@
 <h4 style="color:green"> {{success}}</h4> 
 {% endif %}
 {% if error %}
-<h3 style="color:red"> {{error}}</h3>
+<h6 style="color:red"> {{error}}</h6>
 {% endif %}
 <form action="/choixactivite" method="post">
 
@@ -19,14 +19,14 @@
 {%for item in list['listactivite'] %}
 <ul class="list-group">
 
-    <li class="list-group-item"><input type="checkbox" name="activites" id="" value="{{item}}"> {{item[1]}}</li>
+    <li class="list-group-item"><input type="checkbox" name="activites" id="" value="{{item[0]}}"> {{item[1]}}</li>
 </ul>
 
 {%endfor%}
 <h5>listthematique</h5>    
 {%for item in list['listthematique'] %}
 <ul class="list-group">
-    <li class="list-group-item"><input type="checkbox" name="thematiques" id="" value="{{item}}"> {{item[1]}}</li>
+    <li class="list-group-item"><input type="checkbox" name="thematiques" id="" value="{{item[0]}}"> {{item[1]}}</li>
 </ul>
 
 {%endfor%}

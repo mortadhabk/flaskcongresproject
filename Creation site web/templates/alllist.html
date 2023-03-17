@@ -12,19 +12,35 @@
 <ul>
     <a href="/">return vers la liste</a>
 </ul>
-<h1>listactivite</h1>
-{%for item in data['activites'] %}
+<h6>le prix total</h6>
+{%for item in data['prixtotal'] %}
 <ul>
-    <li>{{item[1]}}</li>
+    <li>{{item[1]}} euro</li>
+</ul>
+<h6>le congre choisi</h6>
+{%endfor%}
+{%for item in data['prixtotal'] %}
+<ul>
+    <li>{{item[0]}} </li>
+</ul>
+{%endfor%}
+<h6>les activite choisies</h6>
+{%for item in data['activity'] %}
+<ul>
+    <li>{{item[0]}}</li>
 </ul>
 
 {%endfor%}
-<h1>listthematique</h1>
-
+<h6>les thematique choisies</h6>
+{%for item in data['thematique'] %}
 <ul>
-    {%for item in data['thematiques'] %}
+
     <li>{{item[0]}}</li>
-    {%endfor%}
 </ul>
+{%endfor%}
+
+<form action="/addlists" method="post">
+    <button type="submit">Confirmer</button>
+</form>
 
 {% endblock %}

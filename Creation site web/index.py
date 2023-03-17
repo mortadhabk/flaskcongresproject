@@ -17,8 +17,6 @@ def connect_db():
         try:
             sqliteConnection = sqlite3.connect("bd.db")       
             print("Connection to SQLite réussi")
-            
-            print("Database created and Successfully Connected to SQLite")
             return sqliteConnection
         except Error as e:
          print(f"The error {e} occured") 
@@ -58,7 +56,6 @@ def verify_email(sqliteConnection,EMAILPART):
     # Fetch all the results from the SELECT statement
     results = cursor.fetchall()
     cursor.close()
-    print(f'result :  {results}')
     if results :
         return True
     else :
@@ -109,14 +106,11 @@ def insert_congres(sqliteConnection,input_data) :
         cursor.execute("select last_insert_rowid()")
         
         cod_congres = cursor.fetchone()[0]
-        print(input_data["codeactivites"][0])
         for item in input_data["codeactivites"] :
-            print(f'codeactivites : {item}')
             cursor.execute("INSERT INTO PROPOSER (CODEACTIVITE,CODCONGRES) VALUES (?, ?)", (item, int(cod_congres)))   
             sqliteConnection.commit()
 
         for item in input_data["codethematiques"] :
-            print(f'codethematiques : {item}')
             cursor.execute("INSERT INTO TRAITER (CODCONGRES,CODETHEMATIQUE) VALUES (?, ?)", (int(cod_congres), item))
             sqliteConnection.commit()
         cursor.close()
@@ -133,33 +127,24 @@ def GetUsernameCode(sqliteConnection,username) :
 
 def inserer_inscrire(sqliteConnection,congresselectionner,username) :
     try:
-            
-    
         cursor = sqliteConnection.cursor()
         userid = GetUsernameCode(sqliteConnection,username)
-       
-
-        for item in congresselectionner: 
-            cursor.execute("INSERT INTO INSCRIRE (CODPARTICIPANT,CODCONGRES) VALUES (?, ?)", (userid,item))
+        print(f'userId : {userid}')
+        cursor.execute("INSERT INTO INSCRIRE (CODPARTICIPANT,CODCONGRES) VALUES (?, ?)", (userid,congresselectionner))
         # Fetch all the results from the SELECT statement
-            sqliteConnection.commit()
-
-        cursor.execute("select c.TITRECONGRES from participants as p , inscrire as i , congres as c where p.CODPARTICIPANT = i.CODPARTICIPANT and i.CODCONGRES = c.CODCONGRES and p.emailpart = 'mortadhaboubaker12@gmail.com'")
-        test = cursor.fetchall()
-        print(f'test  : {test }')
-
-
+        sqliteConnection.commit()
         cursor.close()
         return True
-    except :
+    except  :
+
         return False       
 
  #q 13
-def list_activité_inscrire(sqliteConnection,username) :
+def list_activité_inscrire(sqliteConnection, codecongre) :
     try:
         cursor = sqliteConnection.cursor()
         # Execute a SELECT statement to retrieve all records from the "activites" table  
-        cursor.execute("select   a.codeactivite ,a.NOMACTIVITE, c.CODCONGRES from activites as a , participants as p , inscrire as i , congres as c, proposer as pr where p.CODPARTICIPANT = i.CODPARTICIPANT and i.CODCONGRES = pr.CODCONGRES and a.CODEACTIVITE = pr.CODEACTIVITE and p.emailpart = ? group by a.NOMACTIVITE",[username])
+        cursor.execute("select  a.codeactivite ,a.NOMACTIVITE, c.CODCONGRES  from activites as a , congres as c, proposer as pr where   a.CODEACTIVITE = pr.CODEACTIVITE and pr.CODCONGRES = c.CODCONGRES and c.CODCONGRES = ? group by a.NOMACTIVITE",[codecongre])
         # Fetch all the results from the SELECT statement
         results = cursor.fetchall()
       
@@ -170,11 +155,11 @@ def list_activité_inscrire(sqliteConnection,username) :
 
 
     #q 13
-def list_thematique_inscrire(sqliteConnection,username) :
+def list_thematique_inscrire(sqliteConnection,codecongre) :
     try:
         cursor = sqliteConnection.cursor()
         # Execute a SELECT statement to retrieve all records from the "activites" table  
-        cursor.execute("select th.CODETHEMATIQUE , th.NOMTHEMATIQUE, c.CODCONGRES from  participants as p , inscrire as i , congres as c , traiter as t ,thematiques as th where p.CODPARTICIPANT = i.CODPARTICIPANT and i.CODCONGRES = t.CODCONGRES and t.CODETHEMATIQUE = th.CODETHEMATIQUE and p.emailpart = ? group by th.CODETHEMATIQUE",[username])
+        cursor.execute("select th.CODETHEMATIQUE , th.NOMTHEMATIQUE, c.CODCONGRES from inscrire as i , congres as c , traiter as t ,thematiques as th where   c.CODCONGRES = t.CODCONGRES and t.CODETHEMATIQUE = th.CODETHEMATIQUE   and c.CODCONGRES = ? group by th.CODETHEMATIQUE",[codecongre])
         # Fetch all the results from the SELECT statement
         results = cursor.fetchall()
       
@@ -212,7 +197,6 @@ def show_choix_activities(sqliteConnection,username) :
         cursor = sqliteConnection.cursor()
         cursor.execute("select a.CODEACTIVITE, a.NOMACTIVITE from participants p , choix_activites ca , activites a , congres c where p.CODPARTICIPANT = ca.CODPARTICIPANT and ca.CODEACTIVITE = a.CODEACTIVITE and ca.CODCONGRES = c.CODCONGRES and p.emailpart =? ",[username])
         results = cursor.fetchall()
-        print(f'results : {results}')
 
         cursor.close()
         return results
@@ -223,6 +207,59 @@ def show_choix_thematiques(sqliteConnection,username) :
         cursor.close()
         return results
 
+def prixtotal(sqliteConnection,codecongre, tupleactivites,username) :
+    try:
+        cursor = sqliteConnection.cursor()
+        params = [username, codecongre]
+
+        # loop over the elements in tupleactivites and add them to the parameters list
+        for element in tupleactivites:
+           params.append(int(element[0]))
+        query = "SELECT c.titrecongres, T.MONTANTTARIF+sum(a.PRIXACTIVITE+a.PRIXACTACCOMPAGNANT) as prix FROM tarifs t , statuts cs , participants p , congres c, PROPOSER pr , activites a  where p.codestatut = cs.codestatut and cs.codestatut = t.CODESTATUT and t.CODCONGRES = c.CODCONGRES and p.EMAILPART = ? and c.CODCONGRES = ? and c.codcongres = pr.codcongres and pr.codeactivite = a.CODEACTIVITE and a.CODEACTIVITE in ({}) group by c.codcongres".format(','.join(['?']*len(tupleactivites)))
+
+        cursor.execute(query,params)
+        results = cursor.fetchall()
+        print(f'results {results}')
+        cursor.close()
+        return results
+    except Error as e:
+        print(e)    
+    
+def listactivitechoisir(sqliteConnection, tupleactivites) :
+    try:
+        cursor = sqliteConnection.cursor()
+        params = []
+
+        # loop over the elements in tupleactivites and add them to the parameters list
+        for element in tupleactivites:
+           params.append(element[0])
+        query = "SELECT a.NOMACTIVITE  FROM  activites a where  a.CODEACTIVITE in ({}) ".format(','.join(['?']*len(tupleactivites)))
+
+        cursor.execute(query,params)
+        results = cursor.fetchall()
+        print(results)
+        cursor.close()
+        return results
+    except Error as e:
+        print(e)    
+def listthematiquechoisir(sqliteConnection, thematique) :
+    try:
+        cursor = sqliteConnection.cursor()
+        params = []
+    
+        # loop over the elements in tupleactivites and add them to the parameters list
+        for element in thematique:
+           params.append(element[0])
+        print(f'thematique {thematique}')
+        query = "SELECT t.NOMTHEMATIQUE   FROM  thematiques t where  t.CODETHEMATIQUE in ({}) ".format(','.join(['?']*len(thematique)))
+
+        cursor.execute(query,params)
+        results = cursor.fetchall()
+        print(results)
+        cursor.close()
+        return results
+    except Error as e:
+        print(e)    
 @app.route('/')
 def index():
     return render_template('index.html')
@@ -251,7 +288,6 @@ def enregistrer():
     input_data  = {}
     for key, value in request.form.items():
         input_data[key] = value
-    print(input_data)
     if not verify_email(connect_db(),input_data["EMAILPART"]) :
 
         insert_participant(connect_db(),input_data)
@@ -273,7 +309,6 @@ def search():
     
     mail = request.args.get('EMAILPART')
     participants = searchparticipant(connect_db(),mail)
-    print(participants)
     return render_template('ListInscription.html',participants=participants)
        
 @app.route('/creercongres')
@@ -290,13 +325,11 @@ def creercongres():
 @app.route('/enregistrercongres',methods=['POST'])
 def enregistrercongres():
     input_data  = {}
-    print(request.form.items())
     for key, value in request.form.items():
         input_data[key] = value
     input_data['codethematiques'] = request.form.getlist('codethematiques')
     input_data['codeactivites'] = request.form.getlist('codeactivites')
-    print(input_data)
-    print(input_data)
+
     checkinsert = insert_congres(connect_db(),input_data)
     if (checkinsert) : 
         return render_template('congresenregistree.html',item = input_data)
@@ -327,49 +360,59 @@ def inscrire():
    if 'username' in session:
     
     if request.method == 'POST':
-            congresselectionner = request.form.getlist('congres')
+            congresselectionner = request.form['congres']
             username = session['username']
-            if(inserer_inscrire(connect_db(),congresselectionner,username)) : 
-               return render_template('index.html',success = 'vous etes inscrit')
-            else : 
-               return render_template('inscrire.html',error = 'vous etes pas inscrit il y a un problem')
+            session['codecongre'] = congresselectionner
+            return redirect(url_for('choixactivite'))
+
     congres = get_activites(connect_db())
-    print(f'congres : {congres}')
     return render_template('inscrire.html',congres = congres)
    return redirect(url_for('login'))
 
 @app.route('/choixactivite', methods=['GET', 'POST'])
 def choixactivite():
    if 'username' in session:
-        
+    error = request.values.get('error')
     username = session['username']
-
+    codecongre = session['codecongre']
     if request.method == 'POST':
-        activites = request.form.getlist('activites')
-        thematiques = request.form.getlist('thematiques')
-        print(f'activites {activites}')
-        print(f'thematiques {thematiques}')
 
-        for item in activites : 
-            tuplelist = eval(item)
-            insert_choix_activite(connect_db(),tuplelist[2],tuplelist[0],username)
-        for item in thematiques :    
-            tuplelist = eval(item)
-            insert_choix_thematique(connect_db(),tuplelist[2],tuplelist[0],username)
-        show_activities = show_choix_activities(connect_db(),username)
-        show_thematiques = show_choix_thematiques(connect_db(),username)
-        data = {
-        'thematiques' : show_thematiques,
-        'activites' : show_activities
-              }   
-        return render_template('alllist.html', data= data )
-    listactivite =  list_activité_inscrire(connect_db(),username)
-    listthematique =  list_thematique_inscrire(connect_db(),username)
+        session['activites'] = request.form.getlist('activites')
+        session['thematiques'] = request.form.getlist('thematiques')
+        prixtotals = prixtotal(connect_db(),codecongre, session['activites'] ,username)
+        activity = listactivitechoisir(connect_db(),session['activites'] )
+        thematique = listthematiquechoisir(connect_db(),session['thematiques'] )
+        print(f'thematique : {thematique}')
+        result = {'prixtotal' : prixtotals ,'activity' :activity, 'thematique' : thematique }
+
+     
+        return render_template('alllist.html',data= result )
+    listactivite =  list_activité_inscrire(connect_db(),codecongre)
+    listthematique =  list_thematique_inscrire(connect_db(),codecongre)
     
     list = {'listactivite' :listactivite,'listthematique' : listthematique  }
-    return render_template('choixactivite.html',list = list)  
+    return render_template('choixactivite.html',list = list,error = error)  
 
    return redirect(url_for('login'))
+@app.route('/addlists', methods=['GET', 'POST'])
+def addlists():
+   if request.method == 'POST':
+        inserer_inscrire(connect_db(),session['codecongre'],session['username'])  
+
+        for item in session['activites']  : 
+            tuplelist = eval(item)
+            print(tuplelist)
+            insert_choix_activite(connect_db(),session['codecongre'],tuplelist,session['username'])
+        for item in session['thematiques'] :    
+            tuplelist = eval(item)
+            insert_choix_thematique(connect_db(),session['codecongre'],tuplelist,session['username'])
+
+        session.pop('codecongre', None)
+        session.pop('activites', None)
+        session.pop('thematiques', None)
+
+        return render_template('index.html',success = 'vous etes inscrit ')
+   return render_template('index.html')
 
 
 @app.route('/logout')
